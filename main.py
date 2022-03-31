@@ -22,6 +22,7 @@ import time
 import glob
 
 def parse_args():
+    #添加命令行参数
     parser = argparse.ArgumentParser()
     parser.add_argument('--lrw', default="DIR")
     parser.add_argument("--checkpoint_dir", type=str, default='./data/checkpoints/MultimodalMEM')
@@ -58,7 +59,10 @@ def parse_args():
 
 
 def train_net(args):
+    #torch.backends.cudnn 用法
+    #Benchmark模式会提升计算速度，但是由于计算中有随机性，每次网络前馈结果略有差异。如果想要避免这种结果波动，设置：
     torch.backends.cudnn.deterministic = False
+    #将会让程序在开始时花费一点额外时间，为整个网络的每个卷积层搜索最适合它的卷积实现算法，进而实现网络的加速。
     torch.backends.cudnn.benchmark = True
     torch.manual_seed(args.local_rank)
     torch.cuda.manual_seed_all(args.local_rank)
