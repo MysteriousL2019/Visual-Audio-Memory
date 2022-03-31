@@ -64,8 +64,11 @@ def train_net(args):
     torch.backends.cudnn.deterministic = False
     #将会让程序在开始时花费一点额外时间，为整个网络的每个卷积层搜索最适合它的卷积实现算法，进而实现网络的加速。
     torch.backends.cudnn.benchmark = True
+    #设置唯一确定随机数种子，确保随机数种子不变，使得程序每次使用random函数均可获得同一随机值
     torch.manual_seed(args.local_rank)
+    #为当前GPU生成随机种子
     torch.cuda.manual_seed_all(args.local_rank)
+    #若使用多个GPU，每个都需要生成数
     random.seed(args.local_rank)
     os.environ['OMP_NUM_THREADS'] = '2'
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
